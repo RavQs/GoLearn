@@ -2,10 +2,7 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "..\\..\\..\\..\\Program Files\\Go\\src\\something"
-		}
+		}		
 	],
 	"settings": {}
 }

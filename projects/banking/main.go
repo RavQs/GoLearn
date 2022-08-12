@@ -1,8 +1,8 @@
 package main
 
 import (
-	banking "bankAccount"
 	"fmt"
+	banking "simple/projects/banking/bankAccount"
 )
 
 func main() {

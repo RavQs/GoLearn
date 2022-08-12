@@ -1,12 +1,12 @@
 package main
 
 import (
-	"dict"
 	"fmt"
+	dict "simple/projects/dictionary/myDict"
 )
 
 func main() {
-	a := 15
-	fmt.Println(a)
-	dict.Dictionary
+	dictionary := dict.Dictionary{}
+	dictionary["sayHello"] = "Hello"
+	fmt.Println(dictionary)
 }
