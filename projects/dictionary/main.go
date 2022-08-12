@@ -6,7 +6,11 @@ import (
 )
 
 func main() {
-	dictionary := dict.Dictionary{}
-	dictionary["sayHello"] = "Hello"
-	fmt.Println(dictionary)
+	dictionary := dict.Dictionary{"first": "firstNum"}
+	definition, err := dictionary.Search("first")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(definition)
+	}
 }
