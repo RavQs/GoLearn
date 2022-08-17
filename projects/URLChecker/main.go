@@ -4,75 +4,44 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 var errRequest = errors.New("error")
-var results = make(map[string]string)
 var errResults = make(map[string]string)
 
-// var somethingddos = "https://amazon.com/"
-// var ddos [15]string
+type results struct {
+	url    string
+	status string
+}
 
 func main() {
-	// for ind := range ddos {
-	// 	ddos[ind] = somethingddos
-	// }
+
+	c := make(chan results)
 
 	urls := []string{
 		"https://www.google.com/",
 		"https://nastroyvse.ru/",
-		"https://quizlet.com/",
 		"https://app.milanote.com/",
-		"https://reddit.com/",
 		"https://amazon.com/",
-		"https://amazon.com/",
+		"https://bbc.com/",
+		"https://stackoverflow.com/",
 	}
 
 	for _, url := range urls {
-		err := hitUrl(url)
-		result := "OK"
-
-		if err != nil {
-			result = "FAILED"
-			errResults[url] = result
-		} else {
-			results[url] = result
-		}
-
+		go hitUrl(url, c)
 	}
 
-	for url, result := range results {
-		fmt.Println(url, result)
+	for i := 0; i < len(urls); i++ {
+		fmt.Println(<-c)
 	}
-	fmt.Println("")
-	for url, result := range errResults {
-		fmt.Println(url, result)
-	}
-
-	// values1 := make(map[int]string)
-	// values2 := make(map[int]string)
-
-	// go goCounter("Name1", values1)
-	// goCounter("Name2", values2)
-
-	// fmt.Println(values1, "\n", values2)
 
 }
 
-func hitUrl(url string) error {
+func hitUrl(url string, ch chan<- results) {
 	resp, err := http.Get(url)
-	if err != nil || resp.StatusCode != 200 {
-		return errRequest
+	status := "OK"
+	if err != nil || resp.StatusCode >= 400 {
+		status = "FAILED"
 	}
-
-	return nil
-}
-
-func goCounter(value string, values map[int]string) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(value)
-		values[i] = value
-		time.Sleep(time.Second)
-	}
+	ch <- results{url: url, status: status}
 }
